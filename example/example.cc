@@ -29,9 +29,8 @@ int main() {
   std::ifstream ifs("example.recordio", std::ios::binary);
   recordio::RecordReader reader(&ifs);
 
-  while(!ifs.eof()) {
-    Person person;
-    reader.ReadProtocolMessage(&person);
+  Person person;
+  while(reader.ReadProtocolMessage(&person)) {
     std::cout << person.name() << " (" << person.age() << ")" << std::endl;
   }
 
