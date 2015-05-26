@@ -11,11 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OR_TOOLS_BASE_RECORDIO_H_
-#define OR_TOOLS_BASE_RECORDIO_H_
+#pragma once
 
 
 #include <cstdint>
+#include <memory>
 #include <fstream>
 #include <string>
 
@@ -45,10 +45,10 @@ class RecordWriter {
     const std::string compressed_buffer =
         use_compression_ ? Compress(uncompressed_buffer) : "";
     const uint64_t compressed_size = compressed_buffer.size();
-    file_->write(reinterpret_cast<char*>(&kMagicNumber), sizeof(kMagicNumber));
-    file_->write(reinterpret_cast<char*>(&uncompressed_size),
+    file_->write(reinterpret_cast<const char*>(&kMagicNumber), sizeof(kMagicNumber));
+    file_->write(reinterpret_cast<const char*>(&uncompressed_size),
                  sizeof(uncompressed_size));
-    file_->write(reinterpret_cast<char*>(&compressed_size),
+    file_->write(reinterpret_cast<const char*>(&compressed_size),
                  sizeof(compressed_size));
     if (use_compression_) {
       file_->write(compressed_buffer.c_str(), compressed_size);
@@ -108,5 +108,3 @@ class RecordReader {
   std::ifstream* const file_;
 };
 }  // namespace recordio
-
-#endif  // OR_TOOLS_BASE_RECORDIO_H_
