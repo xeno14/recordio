@@ -1,9 +1,6 @@
 project(recordio)
 cmake_minimum_required(VERSION 2.8)
 
-find_package(zlib REQUIRED)
-find_package(protobuf REQUIRED)
-
 enable_testing()
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2")

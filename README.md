@@ -1,1 +1,7 @@
-# recordio
+recordio
+========
+
+# Dependencies
+
+- zlib
+- protobuf
