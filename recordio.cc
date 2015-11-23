@@ -38,7 +38,7 @@ std::string RecordWriter::Compress(std::string const& s) const {
   unsigned long dsize = source_size + (source_size * 0.1f) + 16;  // NOLINT
   std::unique_ptr<char> destination(new char[dsize]);
   // Use compress() from zlib.h.
-  const int result =
+  // const int result =
       compress(reinterpret_cast<unsigned char*>(destination.get()), &dsize,
                reinterpret_cast<const unsigned char*>(source), source_size);
 
@@ -60,7 +60,7 @@ void RecordReader::Uncompress(const char* const source, uint64_t source_size,
                               uint64_t output_size) const {
   unsigned long result_size = output_size;  // NOLINT
   // Use uncompress() from zlib.h
-  const int result =
+  // const int result =
       uncompress(reinterpret_cast<unsigned char*>(output_buffer), &result_size,
                  reinterpret_cast<const unsigned char*>(source), source_size);
   // if (result != Z_OK) {
