@@ -1,14 +1,14 @@
-include_directories(..)
+set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+include_directories(.. ${TEST_DIR})
 
-enable_testing()
 
 add_custom_command(
-  OUTPUT person.pb.cc person.pb.h
-  WORKING_DIRECTORY .
-  DEPENDS person.proto
-  COMMAND "protoc" "person.proto" "--cpp_out=."
+  OUTPUT ${TEST_DIR}/person.pb.cc ${TEST_DIR}/person.pb.h
+  WORKING_DIRECTORY ${TEST_DIR}
+  DEPENDS ${TEST_DIR}/person.proto
+  COMMAND "protoc" "--proto_path=${TEST_DIR}" "${TEST_DIR}/person.proto" "--cpp_out=."
 )
 
 add_test(recordio_test recordio_test)
-add_executable(recordio_test test.cc person.pb.cc)
+add_executable(recordio_test test.cc ${TEST_DIR}/person.pb.cc)
 target_link_libraries(recordio_test recordio)
