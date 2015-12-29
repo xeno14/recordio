@@ -5,6 +5,7 @@
 
 #include "person.pb.h"
 #include "../recordio.h"
+#include "../recordio_range.h"
 
 #include <cassert>
 #include <iostream>
@@ -12,8 +13,8 @@
 #include <utility>
 #include <vector>
 
-void Write() {
-  std::ofstream ofs("example.recordio", std::ios::binary);
+void Write(const std::string& path) {
+  std::ofstream ofs(path, std::ios::binary);
   recordio::RecordWriter writer(&ofs);
 
   std::string names[] = {"Smith", "Johnson", "William", "Jones"};
@@ -27,9 +28,9 @@ void Write() {
   writer.Close();
 }
 
-std::vector<std::pair<std::string, int>> Read() {
+std::vector<std::pair<std::string, int>> Read(const std::string& path) {
   std::vector<std::pair<std::string, int>> res;
-  std::ifstream ifs("example.recordio", std::ios::binary);
+  std::ifstream ifs(path, std::ios::binary);
   recordio::RecordReader reader(&ifs);
 
   Person person;
@@ -41,8 +42,10 @@ std::vector<std::pair<std::string, int>> Read() {
 }
 
 int main() {
-  Write();
-  auto result = Read();
+  const std::string path = "example.recordio";
+
+  Write(path);
+  auto result = Read(path);
 
   assert(result[0].first == "Smith");
   assert(result[0].second == 20);
@@ -52,6 +55,15 @@ int main() {
   assert(result[2].second == 22);
   assert(result[3].first == "Jones");
   assert(result[3].second == 23);
+
+  std::vector<std::string> names;
+  for (const auto& person : recordio::ReaderRange<Person>(path)) {
+    names.push_back(person.name());
+  }
+  assert(names[0] == "Smith");
+  assert(names[1] == "Johnson");
+  assert(names[2] == "William");
+  assert(names[3] == "Jones");
 
   return 0;
 }
